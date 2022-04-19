@@ -126,6 +126,7 @@ do -- ui
     tFarm:AddToggle('auto_soul', { Text = 'Auto collect souls', Default = false })
     tFarm:AddDivider()
     tFarm:AddToggle('auto_chests', { Text = 'Auto collect chests', Default = false })
+    tFarm:AddToggle('auto_boss', { Text = 'Auto boss', Default = false })
 
     local lfSkills = Tabs.Main:AddLeftTabbox("Skills")
 	local tSkills = lfSkills:AddTab('Auto Skills')
@@ -211,6 +212,13 @@ do -- loops
                 end
             end
         end
+        if Toggles.auto_boss.Value then
+            for _,v in next, game:GetService("Workspace").Maps:GetChildren() do
+                if v.Name == "Boss_3" and v:FindFirstChild("HumanoidRootPart") then
+                    tweenTo(0.1, v.HumanoidRootPart)
+                end
+            end
+        end
         if Toggles.auto_q.Value then
             vim:SendKeyEvent(true,Enum.KeyCode.Q,false,game)
         end
@@ -232,4 +240,3 @@ do -- loops
         chr.Humanoid.JumpPower = tonumber(Options.jumppower.Value)
     end)
 end
-
