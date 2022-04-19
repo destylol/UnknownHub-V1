@@ -1,8 +1,3 @@
---discord.gg/boronide, code generated using luamin.js™
-
-
-
-
 do -- Main
     -- library
 	local repo = 'https://raw.githubusercontent.com/wally-rblx/LinoriaLib/main/'
