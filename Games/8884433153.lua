@@ -5,6 +5,7 @@ do
     -- library imports
     local repo = 'https://raw.githubusercontent.com/wally-rblx/LinoriaLib/main/';
     local lib = loadstring(game:HttpGet(repo .. 'Library.lua'))();
+    local ThemeManager = loadstring(game:HttpGet(repo .. 'addons/ThemeManager.lua'))();
     local SaveManager = loadstring(game:HttpGet(repo .. 'addons/SaveManager.lua'))();
 
     lib.AccentColor = Color3.fromRGB(62, 180, 137)
@@ -160,7 +161,7 @@ do
     end
 
 	do -- Library
-        local win=lib:CreateWindow({Title='Mint Hub | Collect All Pets',Size=UDim2.fromOffset(550, 600),Center=false,AutoShow=true});
+        local win=lib:CreateWindow({Title='Unknown Hub | Collect All Pets',Size=UDim2.fromOffset(550, 600),Center=false,AutoShow=true});
         local Tabs={Main=win:AddTab('Main'),Menu=win:AddTab('Menu Settings')};
 
         local FarmBox=Tabs.Main:AddLeftTabbox('Farm');
@@ -241,8 +242,10 @@ do
 		SaveManager:SetLibrary(lib)
 		SaveManager:IgnoreThemeSettings()
 		SaveManager:SetIgnoreIndexes({'MenuKeybind'})
+		ThemeManager:SetFolder('MyScriptHub')
 		SaveManager:SetFolder('MyScriptHub/collectallpets!')
 		SaveManager:BuildConfigSection(Tabs.Menu)
+		ThemeManager:ApplyToTab(Tabs.Menu)
     end;
     
     do -- loop
@@ -304,7 +307,7 @@ do
                 end
             end;
             hum.WalkSpeed = Options.walkspeed.Value;
-			hum.JumpHeight = Options.jumpheight.Value;
+		hum.JumpHeight = Options.jumpheight.Value;
         end);
     end;
 end;
