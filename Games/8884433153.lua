@@ -161,7 +161,7 @@ do
     end
 
 	do -- Library
-        local win=lib:CreateWindow({Title='Unknown Hub | Collect All Pets',Size=UDim2.fromOffset(550, 600),Center=false,AutoShow=true});
+        local win=lib:CreateWindow({Title='Mint Hub | Collect All Pets',Size=UDim2.fromOffset(550, 600),Center=false,AutoShow=true});
         local Tabs={Main=win:AddTab('Main'),Menu=win:AddTab('Menu Settings')};
 
         local FarmBox=Tabs.Main:AddLeftTabbox('Farm');
