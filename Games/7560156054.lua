@@ -1,17 +1,10 @@
-do -- Main
+do
     -- library
     local repo = "https://raw.githubusercontent.com/wally-rblx/LinoriaLib/main/"
     local Library = loadstring(game:HttpGet(repo .. "Library.lua"))()
     local ThemeManager = loadstring(game:HttpGet(repo .. "addons/ThemeManager.lua"))()
     local SaveManager = loadstring(game:HttpGet(repo .. "addons/SaveManager.lua"))()
     Library:Notify("Anti-AFK loaded!")
-    -- anti afk
-    local vu = game:GetService("VirtualUser")
-    game:GetService("Players").LocalPlayer.Idled:connect(function()
-        vu:Button2Down(Vector2.new(0, 0), workspace.CurrentCamera.CFrame)
-        wait(1)
-        vu:Button2Up(Vector2.new(0, 0), workspace.CurrentCamera.CFrame)
-    end)
 
     -- varbs
     local plr = game:GetService("Players").LocalPlayer
@@ -22,6 +15,13 @@ do -- Main
     local Gamepass = plr.Data.gamepasses
     local rebMod = getsenv(plr.PlayerGui.mainUI.rebirthBackground.LocalScript)
     local rs = game:GetService("RunService")
+    local vu = game:GetService("VirtualUser")
+    -- anti afk
+    plr.Idled:connect(function()
+        vu:Button2Down(Vector2.new(0, 0), wrk.CurrentCamera.CFrame)
+        wait(1)
+        vu:Button2Up(Vector2.new(0, 0), wrk.CurrentCamera.CFrame)
+    end)
 
     -- tables
     local function shopTable()
@@ -30,8 +30,8 @@ do -- Main
         return shopTable
     end
     local function getEggs()
-        local newEggs = {unpack(require(rep.EggModule).Order)} -- unpack(table)
-        for _, v in next, wrk.Eggs:GetChildren() do -- GetChildren()
+        local newEggs = {unpack(require(rep.EggModule).Order)}
+        for _, v in next, wrk.Eggs:GetChildren() do
             if not tostring(v):find("Robux") and not table.find(newEggs, tostring(v)) and
                 not table.find(require(rep.EggModule).Order, tostring(v)) then
                 table.insert(newEggs, tostring(v))
@@ -54,36 +54,33 @@ do -- Main
 
     -- functions
     local function teleportTo(pos) plr.Character.HumanoidRootPart.CFrame = pos.CFrame + Vector3.new(0, 5, 0) end
-    local function Invite()
-        local req = syn.request or http_request or request or http.request or nil
-        if req ~= nil then
-            for port = 6463, 6472, 1 do
-                local inv = "http://127.0.0.1:" .. tostring(port) .. "/rpc?v=1"
-                local http = game:GetService("HttpService")
-                local t = {
-                    cmd = "INVITE_BROWSER",
+    function Invite()
+        if not isfolder('Mint') then
+            makefolder('Mint')
+        end
+        if isfile('Mint.txt') == false then
+            (syn and syn.request or http_request)({
+                Url = 'http://127.0.0.1:6463/rpc?v=1',
+                Method = 'POST',
+                Headers = {
+                    ['Content-Type'] = 'application/json',
+                    ['Origin'] = 'https://discord.com'
+                },
+                Body = game:GetService('HttpService'):JSONEncode({
+                    cmd = 'INVITE_BROWSER',
                     args = {
-                        ["code"] = "JUEu7XFBXD"
+                        code = 'JUEu7XFBXD'
                     },
-                    nonce = string.lower(http:GenerateGUID(false))
-                }
-                local post = http:JSONEncode(t)
-                req({
-                    Url = inv,
-                    Method = "POST",
-                    Body = post,
-                    Headers = {
-                        ["Content-Type"] = "application/json",
-                        ["Origin"] = "https://discord.com"
-                    }
-                })
-            end
+                    nonce = game:GetService('HttpService'):GenerateGUID(false)
+                }),
+                writefile('Mint.txt', 'discord')
+            })
         end
     end
 
     -- ui
     local Window = Library:CreateWindow({
-        Title = "Unknown Hub",
+        Title = "Mint Hub",
         Center = true,
         AutoShow = true,
         Size=UDim2.fromOffset(570, 620),
@@ -109,71 +106,28 @@ do -- Main
         local rtDisc = Tabs.Main:AddRightTabbox("Discord")
         local tDisc = rtDisc:AddTab("Discord")
         do -- clicking section
-            tFarm:AddToggle("autoclick", {
-                Text = "Auto click",
-                Default = false,
-                Tooltip = "Disable effects from game settings"
-            }):AddKeyPicker("AutoplayerBind", {
-                Default = "E",
-                NoUI = true,
-                SyncToggleState = true
-            })
+            tFarm:AddToggle("autoclick", {Text = "Auto click",Default = false,Tooltip = "Disable effects from game settings"}):AddKeyPicker("AutoplayerBind", {Default = "E",NoUI = true,SyncToggleState = true})
             tFarm:AddButton("Unlock x2 click boost", function() plr.Boosts.DoubleClicks.isActive.Value = true end)
             tFarm:AddDivider()
-            tFarm:AddToggle("auto_wheel", {
-                Text = "Auto collect wheel prize",
-                Default = false
-            })
-            tFarm:AddToggle("autogifts", {
-                Text = "Auto collect random gifts",
-                Default = false
-            })
-            tFarm:AddToggle("auto_achievements", {
-                Text = "Auto collect achievements",
-                Default = false
-            })
-            tFarm:AddToggle("auto_chests", {
-                Text = "Auto collect chests",
-                Default = false,
-                Tooltip = "This feature might cause lag"
-            })
+            tFarm:AddToggle("auto_wheel", {Text = "Auto collect wheel prize",Default = false})
+            tFarm:AddToggle("autogifts", {Text = "Auto collect random gifts",Default = false})
+            tFarm:AddToggle("auto_achievements", {Text = "Auto collect achievements",Default = false})
+            tFarm:AddToggle("auto_chests", {Text = "Auto collect chests",Default = false,Tooltip = "This feature might cause lag"})
             tFarm:AddButton("Collect chests", function()
                 for _, v in pairs(wrk.Chests:GetChildren()) do
                     rep.Events.Client.claimChestReward:InvokeServer(v.Name)
                 end
             end)
             tFarm:AddDivider()
-            tFarm:AddToggle("auto_jumps", {
-                Text = "Auto buy jumps",
-                Default = false
-            })
-            tFarm:AddToggle("auto_buy_buttons", {
-                Text = "Auto buy rebirth buttons",
-                Default = false,
-                Tooltip = "This feature buy the pets aswell"
-            })
+            tFarm:AddToggle("auto_jumps", {Text = "Auto buy jumps",Default = false})
+            tFarm:AddToggle("auto_buy_buttons", {Text = "Auto buy rebirth buttons",Default = false,Tooltip = "This feature buy the pets aswell"})
         end
         do -- pets and rebirths
-            tP:AddDropdown("egg", {
-                Values = getEggs(),
-                Default = "~~~",
-                Multi = false,
-                Text = "Eggs"
-            })
-            tP:AddToggle("auto_hatch", {
-                Text = "Auto hatch",
-                Default = false
-            })
-            tP:AddToggle("auto_x2_hatch", {
-                Text = "Auto x2 hatch",
-                Default = false
-            })
-            tP:AddToggle("auto_x3_chests", {
-                Text = "Auto x3 hatch",
-                Default = false
-            })
-            local luckB = tP:AddButton("Unlock x2 luck boost",
-                function() plr.Boosts.DoubleLuck.isActive.Value = true end)
+            tP:AddDropdown("egg", {Values = getEggs(),Default = "~~~",Multi = false,Text = "Eggs"})
+            tP:AddToggle("auto_hatch", {Text = "Auto hatch",Default = false})
+            tP:AddToggle("auto_x2_hatch", {Text = "Auto x2 hatch",Default = false})
+            tP:AddToggle("auto_x3_chests", {Text = "Auto x3 hatch",Default = false})
+            local luckB = tP:AddButton("Unlock x2 luck boost",function() plr.Boosts.DoubleLuck.isActive.Value = true end)
             luckB:AddTooltip("Might be visual, not sure")
             tP:AddDivider()
             tP:AddToggle("auto_best", {Text = "Auto equip best",Default = false})
@@ -221,7 +175,7 @@ do -- Main
         do -- Credits
             tCredits:AddLabel("Script: <font color='#3EB489'>Trustsense</font>")
             tCredits:AddLabel("Hot library: <font color='#ADD8E6'>wally</font>")
-            tCredits:AddLabel("Hot library: <font color='#5865F2'>Discord !0000</font>")
+            tCredits:AddLabel("Additional Help: <font color='#5865F2'>Discord !0000</font>")
         end
         do
             tDisc:AddButton("Copy discord invite", function() setclipboard("https://discord.gg/JUEu7XFBXD") end)
@@ -244,7 +198,7 @@ do -- Main
         end
     end
 
-    -- events
+    -- script
     rs.RenderStepped:connect(function()
         if Toggles.autoclick.Value then getsenv(plr.PlayerGui.mainUI.HUDHandler).activateClick() end
         if Toggles.auto_wheel.Value then
