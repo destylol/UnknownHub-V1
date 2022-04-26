@@ -202,16 +202,19 @@ do
             end;
         end;
         if Toggles.pickaxes.Value then
+            wait(2)
             for i=1,11 do
                 RequestBuyPickaxe:FireServer(i)
             end;
         end;
         if Toggles.backpacks.Value then
+            wait(2)
             for i=1,5 do
                 RequestBuyBackpack:FireServer(i)
             end;
         end;
         if Toggles.u_work.Value then
+            wait(2)
             for i=1,3 do
                 RequestUpgrade:FireServer(i)
             end;
