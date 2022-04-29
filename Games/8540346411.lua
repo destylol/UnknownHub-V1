@@ -140,7 +140,7 @@ do
 	})
 	local Tabs = {
 		Main = Window:AddTab("Main"),
-		["UI Settings"] = Window:AddTab("UI Settings"),
+		Menu = Window:AddTab("Menu Settings"),
 	}
 
 	local lfFarm = Tabs.Main:AddLeftTabbox("Farming")
@@ -215,6 +215,23 @@ do
 	tDisc:AddButton("Copy discord invite", function() setclipboard("https://discord.gg/JUEu7XFBXD") end)
     local DiscButton = tDisc:AddButton("Open discord invite", function() Invite() end)
     DiscButton:AddTooltip("You need to have discord open.")
+
+	-- Menu Settings
+	local rtMenu=Tabs.Menu:AddLeftTabbox('Menu Settings');
+	local tMenu=rtMenu:AddTab('Menu Settings');
+	tMenu:AddButton('Unload Script',function()
+		lib:Unload()
+	end);
+	tMenu:AddLabel('Menu bind'):AddKeyPicker('MenuKeybind', {Default = 'End',NoUI = true,Text = 'Menu keybind'});
+	lib.ToggleKeybind = Options.MenuKeybind
+	ThemeManager:SetLibrary(lib)
+	SaveManager:SetLibrary(lib)
+	SaveManager:IgnoreThemeSettings()
+	SaveManager:SetIgnoreIndexes({'MenuKeybind'})
+	ThemeManager:SetFolder('MyScriptHub')
+	SaveManager:SetFolder('MyScriptHub/collectallpets!')
+	SaveManager:BuildConfigSection(Tabs.Menu)
+	ThemeManager:ApplyToTab(Tabs.Menu)
 
 	-- { Loops } --
 	rs.RenderStepped:Connect(function()
